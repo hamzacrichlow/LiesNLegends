@@ -53,9 +53,9 @@ I want to thank the Apple Developer Academy for grantinhg me with an amazing new
 ## Authors
 
 - Derald Blessman - Developer
-- Kemba Battle - Developer
+- Kemba Battle - Developer/ Designer
 - Noah Hopkins - Designer
-- Hamza Crichlow - Designer
+- Hamza Crichlow - Designer / Developer
 - Asia Beard-Watkins - Project Manager
 
 
