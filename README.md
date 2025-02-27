@@ -35,7 +35,7 @@ Lies & Legends gave us the chance to utilize AVFoundation in the implementation 
 ![Image 2-26-25 at 10 53 AM](https://github.com/user-attachments/assets/66412130-4c48-426f-9f7a-1f12445a9a98)
 
 
-The application of @State was crucial to the implementation of labling and removing of the "imposter", as well as determing player card positions, giving the game a dynamic look and feel.
+The application of @State was crucial to the implementation of labeling and removing of the "imposter", as well as determing player card positions, giving the game a dynamic look and feel.
 
 ![Image 2-26-25 at 10 56 AM](https://github.com/user-attachments/assets/e9cf1e7a-b66f-4cac-a441-92c5deee4051)
 
@@ -47,7 +47,7 @@ The List struct was utilized to display an array of players which can be modifie
 
 ## Acknowledgements
 
-I want to thank the Apple Developer Academy for grantinhg me with an amazing new skill set. I would also like to give a special thanks to my team "First Person Coder" who gave their all to develop this gaming app in a timely manner.
+I want to thank the Apple Developer Academy for granting me with an amazing new skill set. I would also like to give a special thanks to my team "First Person Coder" who gave their all to develop this gaming app in a timely manner.
 
 
 ## Authors
