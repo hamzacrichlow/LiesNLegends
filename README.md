@@ -47,7 +47,7 @@ The List struct was utilized to display an array of players which can be modifie
 
 ## Acknowledgements
 
-I want to thank the Apple Developer Academy for granting me with an amazing new skill set. I would also like to give a special thanks to my team "First Person Coder" who gave their all to develop this gaming app in a timely manner.
+I want to thank the Apple Developer Academy for teaching me an amazing new skill set. I would also like to give a special thanks to my team "First Person Coder" who gave their all to develop this gaming app in a timely manner.
 
 
 ## Authors
