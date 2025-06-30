@@ -8,40 +8,38 @@
 import SwiftUI
 import AVFoundation
 
+
 struct RevealImposterView: View {
     @Environment(\.modelContext) private var context
-    
+
     let imposter: Player
     let roundPlayers: [Player]
     let playerSelections: [Player: Player?]
-    
-    
-    func removeImposters(from players: inout [Player]) {
-        players.removeAll { $0.isImposter }
-    }
-    
+    @EnvironmentObject var audioManager: AudioManager
+    @State private var showRules = false
+
     var body: some View {
         NavigationStack {
             VStack {
                 Text("The Imposter was:")
                     .font(.title)
                     .padding()
-                
+
                 Text(imposter.name)
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .foregroundColor(.red)
                     .padding()
-                
+
                 Text("Players' Guesses:")
                     .font(.title2)
                     .padding(.top)
-                
+
                 ForEach(roundPlayers, id: \.id) { player in
                     HStack {
                         Text("\(player.name) guessed: ")
                             .font(.headline)
-                        
+
                         if let guessedImposter = playerSelections[player] {
                             Text(guessedImposter?.name ?? "No Selection")
                                 .font(.headline)
@@ -54,34 +52,53 @@ struct RevealImposterView: View {
                     }
                     .padding(.horizontal)
                 }
-                
-                // Button to restart or go to the next round
+
                 NavigationLink(destination: ListOfPlayers()) {
-                    
-                                    
-                        
                     ZStack {
                         RoundedRectangle(cornerRadius: 50)
                             .stroke(.black, lineWidth: 6)
-                            .font(.headline)
                             .frame(width: 200, height: 40)
                             .background(Color.white)
                             .cornerRadius(50)
+
                         Text("NEXT ROUND")
                             .fontWeight(.bold)
                             .foregroundColor(.black)
                     }
                 }
                 .padding()
-//                .buttonStyle(.borderedProminent)
             }
             .navigationTitle("Imposter Revealed")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: { showRules.toggle() }) {
+                        Image(systemName: "book.closed")
+                            .font(.title3)
+                            .foregroundStyle(.primary)
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: { audioManager.toggleMusic() }) {
+                        Image(systemName: audioManager.isPlaying ? "speaker.wave.2" : "speaker.slash")
+                            .font(.title2)
+                            .foregroundStyle(audioManager.isPlaying ? .primary : .secondary)
+                    }
+                }
+            }
+            .sheet(isPresented: $showRules) {
+                RulesScreen()
+            }
         }
     }
 }
 
 #Preview {
-    RevealImposterView(imposter: mockImposter, roundPlayers: mockPlayers, playerSelections: mockPlayerSelections)
+    RevealImposterView(
+        imposter: mockImposter,
+        roundPlayers: mockPlayers,
+        playerSelections: mockPlayerSelections
+    )
+    .environmentObject(AudioManager())
 }
 
 // Mock Data

@@ -8,150 +8,221 @@
 import SwiftUI
 
 
-struct GuessItem {
-    let name: String
-    let hints: [String]
+import SwiftUI
+
+
+//Historical figures
+var blackHistory: [String] = ["Dr. MLK", "Malcolm X", "Harriet Tubman", "Thurgood Marshall", "Nat Turner", "Garret Morgan", "Madame CJ Walker", "Mary Ellen Pleasant", "Ronald McNair", "Mae Jemison", "George Floyd", "Trayvon Martin", "Montgomery Bus Boycott", "March on Washington", "Bloody Sunday", "Million Man March"]
+
+// Hip Hop and R&B
+var musicArtists: [String] = ["Kendrick Lamar", "Drake", "Tupac Shakur", "Biggie Smalls", "Jay-Z", "Nas", "Aretha Franklin", "Stevie Wonder", "Prince", "Whitney Houston", "Marvin Gaye", "Al Green", "Diana Ross", "Mary J. Blige", "Alicia Keys", "John Legend", "Usher", "Tina Turner", "Gladys Knight", "Lauryn Hill", "Queen Latifah"]
+
+// Celebrities
+var celebrities: [String] = ["Dave Chappelle", "Eddie Murphy", "Oprah Winfrey", "Tyler Perry", "Spike Lee", "Quincy Jones", "James Earl Jones", "Lena Horne", "Diahann Carroll", "Phylicia Rashad", "Debbie Allen", "Clarence Avant", "Don Cornelius", "Whoopi Goldberg", "Chris Rock", "Michael Jordan", "Magic Johnson", "Kobe Bryant", "LeBron James", "Serena Williams", "Muhammad Ali"]
+
+//Motown Artists
+var motownArtists: [String] = ["Diana Ross", "The Supremes", "The Temptations", "Stevie Wonder", "Marvin Gaye", "The Jackson 5", "Smokey Robinson", "The Miracles", "Martha Reeves", "The Isley Brothers", "Gladys Knight", "The Four Tops", "Mary Wells", "The Marvelettes", "Berry Gordy"]
+
+// Category Enum
+enum GameCategory: String, CaseIterable {
+    case blackHistory1 = "BLACK HISTORY"
+    case music1 = "MUSIC"
+    case celebrities2 = "CELEBRITIES"
+    case motown2 = "MOTOWN"
+    
+    var words: [String] {
+        switch self {
+        case .blackHistory1:
+            return blackHistory
+        case .music1:
+            return musicArtists
+        case .celebrities2:
+            return celebrities
+        case .motown2:
+            return motownArtists
+        }
+    }
 }
 
 
-
-var motown: [String] = ["David Ruffin", "Aretha Franklin", "Marvin Gaye", "Smokey Robinson (HC)", "Rick James", "Prince (HC)", "Martha Reeves", "Diana Ross", "Jackson 5", "Berry Gordy", "Stevie Wonder", "The Temptations", "The Isley Brothers", "The Miracles", "Al Green"]
-
-var historicalFigures: [String] = ["Garret Morgan", "Madame CJ Walker", "Mary Ellen Pleasant", "Montgomery Bus Boycott (HC)", "Nat Turner", "Harriet Tubman", "March on Washington", "Dr. MLK", "Malcolm X", "Ronald McNair", "Mae Jemison", "Thurgood Marshall", "Bloody Sunday", "George Floyd", "Trayvon Martin", "Million Man March"]
-
-var phrases: [String] = ["You don’t have all the answers sway..— Kanye West", "When they go low we go high…—Michelle Obama", "When someone shows you who they are, believe them the first time.—Maya Angelou", "We Didn’t land on Plymouth Rock, my brothers and sisters-Plymouth Rock landed on us-Malcolm X", "You know it’s funny when it rains pours, They got money for wars, but can feed the poor-Tupac Shakur", "Don’t write a check your ass- can’t cash! -Black Mom", "Love, Peace and Soul - Don Cornelius host of Soul Train", "You don’t believe fat meat is greasy-Black Mom", "Oh my Goodness… Oh my Goodness -SheNa-Na (character from Martin)", "Get to stepping- Martin (main character from Martin)", "If that aint the pot calling the kettle black -Black Household", "Talk to the Hand….cause you don’t understand-ShaNaNa (Character from Martin)", "Believe half of what you see. Some and none of what your hear -Marvin Gaye", "What’s the 411? -Mary J. Blige", "You haven’t heard it from me, cause I aint the one to gossip- Benita Betrayal (in Living Color)", "Hard head make a soft behind- Black Grandparent", "Hey, Hey, Hey- Fat Albert (Cosby Kids)", "You better check yourself before you wreck yourself- Black Parents"]
-
-var popCulture: [String] = ["Clarence Avant", "Joe Louis", "Kem", "Dave Chappelle", "Kai Cenaat", "Kendrick Lamar", "Quincy Jones", "James Earl Jones Jr.", "Prince", "Lena Horne", "Diahnn Carroll (Black Actress)", "Druski", "Phylicia Rashaad Allen", "Debbi Allen", "Whitney Houston", "Coleman A. Young", "Billy Holiday"]
-
-var misc: [String] = ["Boyz N The Hood", "Menace to Society", "A different world", "In living color", "Soul Train", "Kareem Abdul Jabbar", "Isiah “Zeke” Thomas", "Kobe Bryant", "Micheal Jordan", "Earvin “Magic” Johnson", "New Edition", "Cassius Clay", "Eddie Murphy", "Drake", "Yeezy"]
-
-var categories = [motown, historicalFigures, phrases, popCulture, misc]
-
 struct PickACategory: View {
+    @EnvironmentObject var audioManager: AudioManager
     let players: [Player]
+    
+    @State private var selectedCategory: GameCategory?
+    @State private var navigateToGame = false
+    @State private var showRules = false
     
     func getRandomWord(from category: [String]) -> String {
         return category.randomElement() ?? "No word found"
     }
     
     var body: some View {
-       NavigationStack{
-            
-            
-            
-            ZStack{
-                Color(.background)
-                    .ignoresSafeArea(edges: .all)
-                VStack {
+        NavigationStack {
+            ZStack {
+                Color(.systemGray5)
+                    .ignoresSafeArea()
+                
+                VStack(spacing: 30) {
+                    Text("Pick a Category")
+                        .font(.title)
+                        .bold()
                     
-                    Image("LogoDark")
-                        .resizable()
-                        .frame(width: 296, height: 80)
-                        .padding()
-                        .padding()
                     
-                    Text("Pick a Category...")
-                        .font(.system(size: 30, weight: .bold, design: .default))
-                        .padding(.top, 40)
-                        .padding(.bottom, 40)
                     
-                    NavigationLink {
-                        CardFlipView(players: players, word: getRandomWord(from: phrases))
-                    } label: {
-                        ZStack{
-                            RoundedRectangle(cornerRadius: 50)
-                                .stroke(.black, lineWidth: 6)
-                                .font(.headline)
-                                .frame(width: 200, height: 40)
-                                .background(Color.black)
-                                .cornerRadius(50)
-                            Text("SAYINGS")
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
+                    ForEach(GameCategory.allCases, id: \.self) { category in
+                        CategoryButton(
+                            title: category.rawValue,
+                            isSelected: selectedCategory == category
+                        ) {
+                            selectedCategory = category
                         }
                     }
-                    .padding(10)
                     
-                    NavigationLink {
-                        CardFlipView(players: players, word: getRandomWord(from: motown))
-                    } label: {
-                        ZStack{
-                            RoundedRectangle(cornerRadius: 50)
-                                .stroke(.black, lineWidth: 6)
-                                .font(.headline)
-                                .frame(width: 200, height: 40)
-                                .background(Color.black)
-                                .cornerRadius(50)
-                            Text("MOTOWN")
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
+                    
+                    
+                    
+                    StartGameButton(isEnabled: selectedCategory != nil) {
+                        if selectedCategory != nil {
+                            navigateToGame = true
                         }
                     }
-                    .padding(10)
-                    
-                    NavigationLink {
-                        CardFlipView(players: players, word: getRandomWord(from: historicalFigures))
-                    } label: {
-                        ZStack{
-                            RoundedRectangle(cornerRadius: 50)
-                                .stroke(.black, lineWidth: 6)
-                                .font(.headline)
-                                .frame(width: 200, height: 40)
-                                .background(Color.black)
-                                .cornerRadius(50)
-                            Text("HISTORY")
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
+                    .padding()
+                    .navigationDestination(isPresented: $navigateToGame) {
+                        if let selectedCategory {
+                            CardFlipView(
+                                players: players,
+                                word: getRandomWord(from: selectedCategory.words)
+                            )
                         }
                     }
-                    .padding(10)
                     
-                    NavigationLink {
-                        CardFlipView(players: players, word: getRandomWord(from: phrases))
-                    } label: {
-                        ZStack{
-                            RoundedRectangle(cornerRadius: 50)
-                                .stroke(.black, lineWidth: 6)
-                                .font(.headline)
-                                .frame(width: 200, height: 40)
-                                .background(Color.black)
-                                .cornerRadius(50)
-                            Text("POP CULTURE")
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                        }
                     
-                    }
-                    .padding(10)
-                    
-                    NavigationLink {
-                        CardFlipView(players: players, word: getRandomWord(from: misc))
-                    } label: {
-                        ZStack{
-                            RoundedRectangle(cornerRadius: 50)
-                                .stroke(.black, lineWidth: 6)
-                                .font(.headline)
-                                .frame(width: 200, height: 40)
-                                .background(Color.black)
-                                .cornerRadius(50)
-                            Text("MISCELANEOUS")
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                        }
-                    
-                    }
-                    .padding(10)
                 }
             }
-           
-           
-            
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: { showRules.toggle() }) {
+                        Image(systemName: "book.closed")
+                            .font(.title3)
+                            .foregroundStyle(.primary)
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: { audioManager.toggleMusic() }) {
+                        Image(systemName: audioManager.isPlaying ? "speaker.wave.2" : "speaker.slash")
+                            .font(.title2)
+                            .foregroundStyle(audioManager.isPlaying ? .primary : .secondary)
+                    }
+                }
+            }
+            .sheet(isPresented: $showRules) {
+                RulesScreen()
+            }
         }
-      
     }
 }
 
 
+struct CategoryButton: View {
+    let title: String
+    let isSelected: Bool
+    let action: () -> Void
+    @Environment(\.colorScheme) var colorScheme
+    var backgroundColor: Color {
+        isSelected ? .primary : .gray
+    }
+    
+    var body: some View {
+        Button(action: {
+            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            withAnimation(.easeInOut(duration: 0.2)) {
+                action()
+            }
+        }) {
+            HStack(spacing: 8) {
+                Text(title)
+                    .textCase(.uppercase)
+                    .font(.headline)
+                    .bold()
+                    .foregroundColor(colorScheme == .dark ? .black : .white)
+                
+                if isSelected {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundColor(colorScheme == .dark ? .black : .white)
+                        .transition(.scale)
+                }
+            }
+            .frame(width: 200, height: 50)
+            .background(
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        backgroundColor,
+                        backgroundColor.opacity(0.7),
+                        backgroundColor
+                    ]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .cornerRadius(25)
+            .overlay(
+                RoundedRectangle(cornerRadius: 25)
+                    .stroke(
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color.clear, backgroundColor.opacity(0.3), Color.clear]),
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        ),
+                        lineWidth: 3
+                    )
+            )
+            .shadow(color: .black.opacity(isSelected ? 0.6 : 0.3), radius: isSelected ? 4 : 1, x: 2, y: 2)
+        }
+        .buttonStyle(.plain)
+        .padding(5)
+    }
+}
+
+
+struct StartGameButton: View {
+    @Environment(\.colorScheme) private var colorScheme
+    let isEnabled: Bool
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: {
+            if isEnabled {
+                UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+                action()
+            }
+        }) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 50)
+                    .stroke(isEnabled ? .green : .gray, lineWidth: 6)
+                    .frame(width: 200, height: 50)
+                    .background(
+                        RoundedRectangle(cornerRadius: 50)
+                            .fill(isEnabled ? Color.green : Color.gray.opacity(0.3))
+                            .shadow(color: .black.opacity(0.3), radius: isEnabled ? 5 : 0, x: 0, y: 2)
+                    )
+                
+                Text("START GAME")
+                    .fontWeight(.bold)
+                    .foregroundColor(isEnabled ? (colorScheme == .dark ? .black : .white)
+                                         : .gray)
+                    .font(.system(size: 16))
+            }
+        }
+        .disabled(!isEnabled)
+        .opacity(isEnabled ? 1.0 : 0.6)
+        .animation(.easeInOut(duration: 0.2), value: isEnabled)
+    }
+}
+
 #Preview {
-    PickACategory(players: xplayers)
+    PickACategory(
+        players: xplayers
+    )
+    .environmentObject(AudioManager())
 }
