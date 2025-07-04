@@ -225,7 +225,7 @@ struct CardFlipView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: { showRules.toggle() }) {
-                        Image(systemName: "book.closed")
+                        Image(systemName: "text.page.badge.magnifyingglass")
                             .font(.title3)
                             .foregroundStyle(.primary)
                     }

@@ -8,184 +8,216 @@
 import SwiftUI
 
 struct RulesScreen: View {
+    
+    @State private var arrowOffset: CGFloat = 0
+    @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
-        ZStack {
-            Color(.systemGray6)
-                .ignoresSafeArea()
-            
-            ScrollView {
-                VStack(alignment: .leading, spacing: 32) {
-                    Text("RULES")
-                        .font(.system(size: 36, weight: .black))
-                        .foregroundColor(.black)
-                        .padding(.top, 20)
-                        .padding(.bottom, 30)
-                    
-                    // Setup Section
-                    RuleSection(
-                        title: "Setup (4-6 Players)",
-                        content: """
-                        • Add each player's name to the game
-                        • Select a category for the round
-                        • Categories include: 
-                        Black History 
-                        Hip-Hop 
-                        R&B/Soul 
-                        Entertainment 
-                        Sports 
-                        Motown 
-                        Icons
-                        """
-                    )
-                    // Roles Section
-                    RuleSection(
-                        title: "Player Roles",
-                        content: """
-                        Legitimates:
-                        All players but one get the same word from the category
-                        Example: "Diana Ross"
+        NavigationStack{
+            ZStack {
+                
+                ScrollView {
+                    VStack{
                         
-                        The Imposter (1 player):
-                        The remaining player is the imposter and doesnt know what the word is but they have to act like they do.
-                        """
-                    )
-
-                    // Phone Passing Section
-                    RuleSection(
-                        title: "Phone Passing Phase",
-                        content: """
-                        The phone will guide you through each player viewing their role:
+                        Image("Spear")
+                              .resizable()
+                              .scaledToFit()
+                              .padding(.vertical, 10)
+                              .padding(.horizontal, 20)
+                          
                         
-                        1. Screen asks "Are you (Player Name)?"
-                           • If it's you: Tap "Yes" to continue
+                        Text("Read through these rules carefully to perfect your skills in deception!")
+                            .multilineTextAlignment(.center)
+                            .font(.title2)
+                            .bold()
+                            .padding(.vertical, 5)
+                            .padding(.horizontal, 20)
                         
-                        2. When it's your turn, tap "Flip Card" to see your secret role
+                      Divider()
+                            .padding(.horizontal, 20)
                         
-                        3. Keep your role secret! Don't let others see your screen
+                     
+                        // Setup Section
+                        RuleSection(
+                            title:"Setup",
+                            subtitle:"4-6 Players",
+                            content: """
+                            Add each player's name, then select a category. (Black History, Motown, Celebrities, etc.)
+                            """
+                        )
+                        Image("Group")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .frame( height: 100)
                         
-                        4. After viewing, pass the phone to the next player
-                        """
-                    )
-                    
-                    
-                    // Clue Giving Section
-                    RuleSection(
-                        title: "Giving Clues",
-                        content: """
-                        Once everyone has viewed their card:
                         
-                        • Players take turns giving one word clues
-                        • Clues must be related to your word
-                        • Cannot be part of the word itself
-                        • Keep it brief - one or two words maximum
+                        // Roles Section
+                        RuleSection(
+                            title: "Player Roles",
+                            content: """
+                            Legitimates: All get the same word from the category (e.g., "Diana Ross").
+                            
+                            Imposter (Only 1 Player): Doesn't know the secret word but must pretend they do.
+                            """
+                        )
+                        HStack{
+                            Image(systemName:"iphone")
+                                .foregroundStyle((colorScheme == .dark ? Color.white : .black).opacity(0.8))
+                                .font(.system(size: 75))
+                                .offset(x: arrowOffset)
+                                .onAppear {
+                                    withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
+                                        arrowOffset = 10
+                                    }
+                                }
+                            Image(systemName:"arrow.right")
+                                .foregroundStyle((colorScheme == .dark ? Color.white : .black).opacity(0.8))
+                                .font(.system(size: 35))
+                                .offset(x: arrowOffset)
+                                .onAppear {
+                                    withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
+                                        arrowOffset = 10
+                                    }
+                                }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .center)
                         
-                        Example Round:
-                        Category: Motown 
-                        Secret Word: "Diana Ross"
+                        // Phone Passing Section
+                        RuleSection(
+                            title: "Phone Passing",
+                            subtitle: "Assign your Roles",
+                            content: """
+                            Pass the phone around so each player can privately view their role:
+                            
+                            1. Tap "Flip Card" to see your role and secret word
+                            2. Keep your role secret!
+                            3. Pass to the next player
+                            """
+                        )
                         
-                        • Player 1 (Legitimate): "Singer"
-                        • Player 2 (Legitimate): "Supreme"
-                        • Player 3 (Imposter): "Music" *(only knows "Motown Artists")*
-                        • Player 4 (Legitimate): "Detroit"
-                        • Player 5 (Legitimate): "Diva"
+              
                         
-                        Notice how the Imposter's clue "Music" is more generic!
-                        """
-                    )
-                    
-                    // Voting Section
-                    RuleSection(
-                        title: "Voting Phase",
-                        content: """
-                        After everyone gives their clues:
+                        // Clue Giving Section
+                        RuleSection(
+                            title: "Giving Clues",
+                            content: """
+                            Players take turns giving one word clues clockwise from the last player to view their role:
+                            • Clues must relate to your word
+                            • Cannot be part of the word itself
+                            • Keep it brief (1-2 words max)
+                            
+                            Example - Secret Word: "Diana Ross"
+                            Legitimates: "Girl Group", "Supreme", "Detroit"
+                            Imposter: "Music" (more generic)
+                            """
+                        )
                         
-                        **For Legitimates:**
-                        • Pass the phone around for voting
-                        • Each Legitimate privately votes for who they think the imposter is
-                        • Keep votes secret until everyone has voted
+                        // Voting Section
+                        RuleSection(
+                            title: "Voting",
+                            content: """
+                            Legitimates: Vote for who you think is the imposter.
+                            
+                            Imposter: Guess the secret word from multiple choice options based on the clues you heard.
+                            """
+                        )
                         
-                        **For the Imposter:**
-                        • Gets multiple choice options to guess what they think the secret word is
-                        • Based on all the clues they heard during the round
-                        • This is their chance to win points by figuring out the word
-                        """
-                    )
-                    
-                    // Scoring Section
-                    RuleSection(
-                        title: "Scoring",
-                        content: """
-                        **Legitimates Win:** 
-                        If they correctly identify the imposter, each Legitimate gets 1 point
+                        // Scoring Section
+                        RuleSection(
+                            title: "Scoring",
+                            content: """
+                            Legitimates: 1 point for correctly identifying the imposter.
+                            
+                            Imposter: 2 points for avoiding detection + 1 point for guessing the word correctly.
+                            """
+                        )
                         
-                        **Imposter Wins:** 
-                        If the imposter avoids detection, they get 2 points
+                        // Strategy Section
+                        RuleSection(
+                            title: "Tips",
+                            content: """
+                            Legitimates: Don't be too obvious! Watch for vague clues.
+                            
+                            Imposter: Listen carefully, give generic clues that could apply to multiple things, and pay attention for your final guess!
+                            """
+                        )
                         
-                        **Bonus Points:** 
-                        The imposter earns an extra point by correctly guessing the secret word from multiple choice options
-                        """
-                    )
-                    
-                    // Strategy Section
-                    RuleSection(
-                        title: "Tips for Success",
-                        content: """
-                        **For Legitimates:**
-                        • Give clues that prove you know the specific word
-                        • Pay attention to vague or generic clues - typically from the imposter
-                        • Work together to identify suspicious behavior
-                        
-                        **For the Imposter:**
-                        • Listen carefully to all clues to figure out the word
-                        • Give clues that could apply to multiple things in the category
-                        • Try to blend in with the group's clue-giving style
-                        • Pay close attention - you'll need to guess the word at the end!
-                        """
-                    )
-                    
-                    // End Game Section
-                    RuleSection(
-                        title: "End of Round",
-                        content: """
-                        • View the results and see who won the round
-                        • Start a new round with a different category
-                        • Play as many rounds as you'd like!
-                        • The player with the most points after all rounds wins the game
-                        """
-                    )
+                        // End Game Section
+                        RuleSection(
+                            title: "End of Round",
+                            content: """
+                            View results, start new rounds with different categories, and play as many rounds as you'd like! Most points wins!
+                            """
+                        )
+                    }
+                    .navigationTitle(Text("Game Rules"))
+                    .navigationBarTitleDisplayMode(.large)
                 }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 40)
             }
         }
     }
-}
-
-struct RuleSection: View {
-    let title: String
-    let content: String
     
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(title)
-                .font(.system(size: 24, weight: .bold))
-                .foregroundColor(.black)
-            
-            Text(content)
-                .font(.system(size: 16, weight: .medium))
-                .foregroundColor(.black)
-                .lineSpacing(4)
-                .multilineTextAlignment(.leading)
+    
+    struct RuleSection: View {
+        let title: String
+        let subtitle: String?
+        let content: String
+        
+        // Initializer with optional subtitle
+        init(title: String, subtitle: String? = nil, content: String) {
+            self.title = title
+            self.subtitle = subtitle
+            self.content = content
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 20)
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(Color.white)
-                .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
-        )
+        
+        var body: some View {
+            VStack(alignment: .leading, spacing: 20) {
+                Text(title)
+                    .font(.title)
+                    .bold()
+                    .multilineTextAlignment(.center)
+                Divider()
+                
+                // Only show subtitle if it exists
+                if let subtitle = subtitle {
+                    Text(subtitle)
+                        .font(.headline)
+                }
+                
+                Text(content)
+                    .font(.body)
+                    .lineSpacing(4)
+                    .multilineTextAlignment(.leading)
+            }
+            .padding(.vertical)
+            .padding(.horizontal, 20)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(
+                LinearGradient(
+                    gradient: Gradient(colors: [Color(UIColor.systemGray5), Color(UIColor.systemGray5).opacity(0.66), Color(UIColor.systemGray5)]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .cornerRadius(15)
+            .overlay(
+                RoundedRectangle(cornerRadius: 15)
+                    .stroke(
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color(.gamegreen).opacity(0.9),Color(.gamered).opacity(0.9),Color(.gameyellow).opacity(0.9), Color(.gameyellow).opacity(0.9),Color(.gamegreen).opacity(0.9),Color(.gamered).opacity(0.9),]),
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        ),
+                        lineWidth:5
+                    ),
+            )
+            .padding(.horizontal)
+            .padding(.vertical)
+        }
     }
 }
-#Preview {
+
+#Preview{
     RulesScreen()
 }

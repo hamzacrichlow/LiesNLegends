@@ -63,12 +63,12 @@ struct PickACategory: View {
                 Color(.systemGray5)
                     .ignoresSafeArea()
                 
-                VStack(spacing: 30) {
+                VStack(spacing: 20) {
                     Text("Pick a Category")
-                        .font(.title)
+                        .font(.largeTitle)
                         .bold()
-                    
-                    
+                        .padding(.top,20)
+                    Spacer()
                     
                     ForEach(GameCategory.allCases, id: \.self) { category in
                         CategoryButton(
@@ -80,14 +80,14 @@ struct PickACategory: View {
                     }
                     
                     
+                    Spacer()
                     
-                    
-                    StartGameButton(isEnabled: selectedCategory != nil) {
+                    StartGameButton(isEnabled: selectedCategory != nil, text: "START GAME") {
                         if selectedCategory != nil {
                             navigateToGame = true
                         }
                     }
-                    .padding()
+                    .padding(.bottom,20)
                     .navigationDestination(isPresented: $navigateToGame) {
                         if let selectedCategory {
                             CardFlipView(
@@ -103,7 +103,7 @@ struct PickACategory: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: { showRules.toggle() }) {
-                        Image(systemName: "book.closed")
+                        Image(systemName: "text.page.badge.magnifyingglass")
                             .font(.title3)
                             .foregroundStyle(.primary)
                     }
@@ -135,7 +135,7 @@ struct CategoryButton: View {
     
     var body: some View {
         Button(action: {
-            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            UIImpactFeedbackGenerator(style: .soft).impactOccurred()
             withAnimation(.easeInOut(duration: 0.2)) {
                 action()
             }
@@ -143,17 +143,13 @@ struct CategoryButton: View {
             HStack(spacing: 8) {
                 Text(title)
                     .textCase(.uppercase)
-                    .font(.headline)
+                    .font(.title)
                     .bold()
                     .foregroundColor(colorScheme == .dark ? .black : .white)
                 
-                if isSelected {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(colorScheme == .dark ? .black : .white)
-                        .transition(.scale)
-                }
+               
             }
-            .frame(width: 200, height: 50)
+            .frame(width: 350,height: 60)
             .background(
                 LinearGradient(
                     gradient: Gradient(colors: [
@@ -188,7 +184,12 @@ struct CategoryButton: View {
 struct StartGameButton: View {
     @Environment(\.colorScheme) private var colorScheme
     let isEnabled: Bool
+    let text: String
     let action: () -> Void
+    
+    var backgroundColor: Color {
+        isEnabled ? .green : .gray
+    }
     
     var body: some View {
         Button(action: {
@@ -199,18 +200,36 @@ struct StartGameButton: View {
         }) {
             ZStack {
                 RoundedRectangle(cornerRadius: 50)
-                    .stroke(isEnabled ? .green : .gray, lineWidth: 6)
-                    .frame(width: 200, height: 50)
-                    .background(
-                        RoundedRectangle(cornerRadius: 50)
-                            .fill(isEnabled ? Color.green : Color.gray.opacity(0.3))
-                            .shadow(color: .black.opacity(0.3), radius: isEnabled ? 5 : 0, x: 0, y: 2)
+                    .fill(
+                        LinearGradient(
+                            gradient: Gradient(colors: [
+                                backgroundColor,
+                                backgroundColor.opacity(0.8),
+                                backgroundColor.opacity(0.5),
+                                backgroundColor.opacity(0.8),
+                                backgroundColor
+                            ]),
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
                     )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 50)
+                            .stroke(
+                                LinearGradient(
+                                    gradient: Gradient(colors: [Color.clear, backgroundColor.opacity(0.3), Color.clear]),
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                ),
+                                lineWidth: 3
+                            )
+                    )
+                    .frame(width: 200, height: 50)
+                    .shadow(color: .black.opacity(isEnabled ? 0.6 : 0.3), radius: isEnabled ? 4 : 1, x: 2, y: 2)
                 
-                Text("START GAME")
+                Text(text)
                     .fontWeight(.bold)
-                    .foregroundColor(isEnabled ? (colorScheme == .dark ? .black : .white)
-                                         : .gray)
+                    .foregroundColor(isEnabled ? (colorScheme == .dark ? .black : .white) : .gray)
                     .font(.system(size: 16))
             }
         }
@@ -219,7 +238,6 @@ struct StartGameButton: View {
         .animation(.easeInOut(duration: 0.2), value: isEnabled)
     }
 }
-
 #Preview {
     PickACategory(
         players: xplayers

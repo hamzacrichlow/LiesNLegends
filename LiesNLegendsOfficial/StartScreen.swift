@@ -69,7 +69,7 @@ struct GameNavigationView<Content: View>: View {
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(action: { showRules.toggle() }) {
-                            Image(systemName: "book.closed")
+                            Image(systemName: "text.page.badge.magnifyingglass")
                                 .font(.title3)
                                 .foregroundStyle(.primary)
                         }
@@ -84,6 +84,9 @@ struct GameNavigationView<Content: View>: View {
                 }
                 .sheet(isPresented: $showRules) {
                     RulesScreen()
+                        .presentationDragIndicator(.visible)
+                        .presentationDetents([.large])
+                        .presentationCornerRadius(20)
                 }
                 .tint(.primary)
         }

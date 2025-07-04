@@ -51,7 +51,7 @@ struct Question: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: { showRules.toggle() }) {
-                        Image(systemName: "book.closed")
+                        Image(systemName: "text.page.badge.magnifyingglass")
                             .font(.title3)
                             .foregroundStyle(.primary)
                     }
@@ -218,7 +218,7 @@ struct GuessTheImposter: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button { showRules.toggle() } label: {
-                        Image(systemName: "book.closed")
+                        Image(systemName: "text.page.badge.magnifyingglass")
                             .font(.title3)
                             .foregroundStyle(.primary)
                     }
